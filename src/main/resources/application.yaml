@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Hospital DB API
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER:}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/hospitalDB}
+    username: ${DATABASE_USER:root}
+    password: ${DATABASE_PASSWORD:password}
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
