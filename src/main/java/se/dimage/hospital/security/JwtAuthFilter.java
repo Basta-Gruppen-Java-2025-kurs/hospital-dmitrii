@@ -30,8 +30,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             logger.info("jwt = '" + jwt + "'");
 
             String username = jwtService.extractUsername(jwt);
+            logger.info("jwt username: " + username);
 
             List<String> roles = jwtService.extractRoles(jwt);
+            logger.info("jwt roles: " + roles);
 
             List<SimpleGrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new).toList();
 
