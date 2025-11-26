@@ -3,6 +3,7 @@ package se.dimage.hospital.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +30,10 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/patients/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/patients/**").authenticated()
+                        .requestMatchers("/patients/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/journal/**").authenticated()
+                        .requestMatchers("/journal/**").hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

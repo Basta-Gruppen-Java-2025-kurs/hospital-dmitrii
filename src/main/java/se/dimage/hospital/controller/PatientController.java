@@ -1,5 +1,6 @@
 package se.dimage.hospital.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,22 +23,22 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PatientWithJournalsResponseDTO> getPatient(@PathVariable Long id) {
+    public ResponseEntity<PatientWithJournalsResponseDTO> getPatient(@PathVariable @Valid Long id) {
         return ResponseEntity.ok(service.getPatientWithJournal(id));
     }
 
     @PostMapping
-    public ResponseEntity<PatientResponseDTO> addPatient(@RequestBody PatientRequestDTO requestDTO) {
+    public ResponseEntity<PatientResponseDTO> addPatient(@RequestBody @Valid PatientRequestDTO requestDTO) {
         return ResponseEntity.ok(service.add(requestDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable Long id, @RequestBody PatientRequestDTO requestDTO) {
+    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable @Valid Long id, @RequestBody @Valid PatientRequestDTO requestDTO) {
         return ResponseEntity.ok(service.update(id, requestDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deletePatient(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deletePatient(@PathVariable @Valid Long id) {
         return ResponseEntity.ok(service.delete(id));
     }
 }
