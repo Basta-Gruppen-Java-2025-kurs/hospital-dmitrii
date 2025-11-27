@@ -1,6 +1,8 @@
 package se.dimage.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.dimage.hospital.dto.JournalRequestDTO;
 import se.dimage.hospital.dto.JournalResponseDTO;
@@ -17,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class JournalService {
+    private static final Logger log = LoggerFactory.getLogger(JournalService.class);
     private final JournalRepository repository;
     private final JournalMapper mapper;
     private final PatientRepository patientRepository;
@@ -34,9 +37,14 @@ public class JournalService {
     }
 
     public JournalResponseDTO update(Long id, JournalRequestDTO requestDTO) {
+        log.info("Journal update service called. Id: " + id);
         Journal j = mapper.toEntity(requestDTO);
+        log.info("Mapped to entity: " + j);
         j.setId(id);
-        return mapper.toResponseDTO(repository.save(j));
+        log.info("Id set: " + j.getId());
+        Journal saved = repository.save(j);
+        log.info("Saved to repository: " +  saved);
+        return mapper.toResponseDTO(saved);
     }
 
     public JournalResponseDTO patch(Long id, JournalRequestDTO requestDTO) {

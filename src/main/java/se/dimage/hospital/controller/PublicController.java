@@ -64,8 +64,6 @@ public class PublicController {
             return ResponseEntity.status(403).body("Invalid refresh token");
         }
 
-//        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.))
-
         String username = claims.getSubject();
         if (customUserDetailService.isRefreshTokenGood(username, refreshToken)) {
             String newAccessToken = jwtService.generateToken(customUserDetailService.loadUserByUsername(username));

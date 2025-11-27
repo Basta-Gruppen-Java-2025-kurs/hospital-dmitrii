@@ -2,6 +2,8 @@ package se.dimage.hospital.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.dimage.hospital.dto.JournalRequestDTO;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("/journal")
 @RequiredArgsConstructor
 public class JournalController {
+    private static final Logger log = LoggerFactory.getLogger(JournalController.class);
     private final JournalService service;
 
     @GetMapping
@@ -33,6 +36,7 @@ public class JournalController {
 
     @PutMapping("/{id}")
     public ResponseEntity<JournalResponseDTO> updateJournal(@PathVariable Long id, @RequestBody @Valid JournalRequestDTO requestDTO) {
+        log.info("Journal update request. Id: " + id + ". Request DTO: " + requestDTO);
         return ResponseEntity.ok(service.update(id, requestDTO));
     }
 

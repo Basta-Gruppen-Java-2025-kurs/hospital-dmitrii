@@ -1,6 +1,5 @@
 package se.dimage.hospital.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,9 +19,13 @@ public class Journal {
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
-    @JsonManagedReference
     Patient patient;
 
     @Column(nullable = false)
     String record;
+
+    @Override
+    public String toString() {
+        return "{ id: " +id + ", patient: " + patient.getId() + ", record: " + record + "  }";
+    }
 }
