@@ -11,9 +11,9 @@ spring:
     url: ${DATABASE_URL:jdbc:mysql://localhost:3306/hospitalDB}
     username: ${DATABASE_USER:root}
     password: ${DATABASE_PASSWORD:password}
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
   jpa:
     hibernate:
       ddl-auto: create

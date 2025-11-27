@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class JournalResponseDTO {
     Long id;
     String record;
+    Long patientId;
     String patientName;
 }
