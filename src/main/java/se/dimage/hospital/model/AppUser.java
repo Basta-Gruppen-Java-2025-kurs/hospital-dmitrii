@@ -26,6 +26,9 @@ public class AppUser {
     @Column(nullable = false)
     String password;
 
+    @Column(length = 1000)
+    private String refreshToken;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

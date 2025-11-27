@@ -35,7 +35,7 @@ public class JwtService {
                 .compact();
     }
 
-    private Claims extractClaims(String token) {
+    public Claims extractClaims(String token) {
         try {
             return Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())).build()
@@ -43,6 +43,12 @@ public class JwtService {
         } catch (Exception e) {
             throw (new BadSignatureException("Error parsing token: " + e.getLocalizedMessage()));
         }
+    }
+
+    public String generateRefreshToken(String username) {
+        return Jwts.builder().subject(username)
+                .issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + 1100000000))
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), Jwts.SIG.HS256).compact();
     }
 
     @SuppressWarnings("unchecked")

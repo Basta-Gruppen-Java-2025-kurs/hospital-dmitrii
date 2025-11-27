@@ -10,8 +10,10 @@ import se.dimage.hospital.model.Journal;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        unmappedSourcePolicy = ReportingPolicy.IGNORE)
+        unmappedSourcePolicy = ReportingPolicy.IGNORE,
+        uses = PatientMapper.class)
 public interface JournalMapper {
+    @Mapping(source = "patientId", target = "patient")
     Journal toEntity(JournalRequestDTO requestDTO);
 
     @Mapping(target = "patientName", source = "patient.name")

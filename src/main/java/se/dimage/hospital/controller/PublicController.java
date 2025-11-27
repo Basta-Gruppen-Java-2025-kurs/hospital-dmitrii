@@ -1,5 +1,6 @@
 package se.dimage.hospital.controller;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +33,9 @@ public class PublicController {
 
     @GetMapping("/env")
     public  ResponseEntity<List<String>> envPage() {
-        return ResponseEntity.ok(configProperties.getEnvKeys().stream().map(k -> k + ": " + configProperties.getProperty(k)).toList());
+        return ResponseEntity.ok(configProperties.getEnvKeys().stream()
+                .map(k -> k + ": " + configProperties.getProperty(k))
+                .toList());
     }
 
     @PostMapping("/login")
@@ -40,10 +43,34 @@ public class PublicController {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.username(), login.password())
         );
+
         UserDetails user = customUserDetailService.loadUserByUsername(login.username());
 
         String token = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(login.username());
 
-        return ResponseEntity.ok(new JwtResponseDTO(token));
+        customUserDetailService.updateRefreshToken(login.username(), refreshToken);
+
+        return ResponseEntity.ok(new JwtResponseDTO(token, refreshToken));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestParam String refreshToken) {
+        Claims claims;
+
+        try {
+            claims = jwtService.extractClaims(refreshToken);
+        } catch (Exception e) {
+            return ResponseEntity.status(403).body("Invalid refresh token");
+        }
+
+//        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.))
+
+        String username = claims.getSubject();
+        if (customUserDetailService.isRefreshTokenGood(username, refreshToken)) {
+            String newAccessToken = jwtService.generateToken(customUserDetailService.loadUserByUsername(username));
+            return ResponseEntity.ok(new JwtResponseDTO(newAccessToken, refreshToken));
+        }
+        return ResponseEntity.status(403).body("Invalid refresh token");
     }
 }

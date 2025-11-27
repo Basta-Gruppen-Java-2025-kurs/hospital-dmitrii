@@ -12,8 +12,10 @@ import se.dimage.hospital.model.Patient;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
-        uses = JournalMapper.class)
+        uses = {JournalMapper.class, ReferenceMapper.class})
 public interface PatientMapper {
+
+    Patient toEntity(Long id);
 
     Patient toEntity(PatientRequestDTO dto);
 
