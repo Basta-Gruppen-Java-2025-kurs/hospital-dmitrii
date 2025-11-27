@@ -1,10 +1,10 @@
 package se.dimage.hospital.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import se.dimage.hospital.dto.JournalRequestDTO;
 import se.dimage.hospital.dto.JournalResponseDTO;
 import se.dimage.hospital.service.JournalService;
 
@@ -19,6 +19,31 @@ public class JournalController {
     @GetMapping
     public ResponseEntity<List<JournalResponseDTO>> listAll() {
         return ResponseEntity.ok(service.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<JournalResponseDTO> listById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<JournalResponseDTO> addJournal(@RequestBody @Valid JournalRequestDTO requestDTO) {
+        return ResponseEntity.ok(service.add(requestDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<JournalResponseDTO> updateJournal(@PathVariable Long id, @RequestBody @Valid JournalRequestDTO requestDTO) {
+        return ResponseEntity.ok(service.update(id, requestDTO));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<JournalResponseDTO> patchJournal(@PathVariable Long id, @RequestBody JournalRequestDTO requestDTO) {
+        return ResponseEntity.ok(service.patch(id, requestDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteJournal(@PathVariable Long id) {
+        return ResponseEntity.ok(service.delete(id));
     }
 
 }
