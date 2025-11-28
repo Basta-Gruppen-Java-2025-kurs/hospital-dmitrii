@@ -28,10 +28,10 @@ public class PatientController {
 
     @GetMapping("/search")
     public ResponseEntity<List<PatientResponseDTO>> searchForPatients(@RequestParam(required = false) String name,
-                                                                      @RequestParam(required = false) String personNumber,
+                                                                      @RequestParam(required = false) String personalNumber,
                                                                       @RequestParam(required = false) Integer minJournals,
                                                                       @RequestParam(required = false) Integer maxJournals) {
-        return ResponseEntity.ok(service.search(name, personNumber, minJournals, maxJournals));
+        return ResponseEntity.ok(service.search(name, personalNumber, minJournals, maxJournals));
     }
 
     @GetMapping("/{id}")
@@ -47,9 +47,15 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable @Valid Long id, @RequestBody PatientRequestDTO requestDTO) {
+    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable @Valid Long id, @Valid @RequestBody PatientRequestDTO requestDTO) {
         log.info("Update patient data for patient # " + id);
         return ResponseEntity.ok(service.update(id, requestDTO));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<PatientResponseDTO> patchPatient(@PathVariable @Valid Long id, @RequestBody PatientRequestDTO requestDTO) {
+        log.info("Patch patient data for patient # " + id + " with this info: " + requestDTO);
+        return ResponseEntity.ok(service.patch(id, requestDTO));
     }
 
     @DeleteMapping("/{id}")
