@@ -21,32 +21,39 @@ public class JournalController {
 
     @GetMapping
     public ResponseEntity<List<JournalResponseDTO>> listAll() {
+        log.info("Listing all journals");
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<JournalResponseDTO> listById(@PathVariable Long id) {
+        log.info("Shoing details of journal # "+ id);
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<JournalResponseDTO> addJournal(@RequestBody @Valid JournalRequestDTO requestDTO) {
+        log.info("Adding new journal: " + requestDTO);
         return ResponseEntity.ok(service.add(requestDTO));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<JournalResponseDTO> updateJournal(@PathVariable Long id, @RequestBody @Valid JournalRequestDTO requestDTO) {
-        log.info("Journal update request. Id: " + id + ". Request DTO: " + requestDTO);
+        log.info("Updating journal # " + id + ". New journal data: " + requestDTO);
         return ResponseEntity.ok(service.update(id, requestDTO));
     }
 
+
+
     @PatchMapping("/{id}")
     public ResponseEntity<JournalResponseDTO> patchJournal(@PathVariable Long id, @RequestBody JournalRequestDTO requestDTO) {
+        log.info("Patching journal # " + id + " with this data " + requestDTO);
         return ResponseEntity.ok(service.patch(id, requestDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteJournal(@PathVariable Long id) {
+        log.info("Deleting journal # " + id);
         return ResponseEntity.ok(service.delete(id));
     }
 

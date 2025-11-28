@@ -31,6 +31,12 @@ public class PatientService {
     }
 
     public PatientResponseDTO update(Long id, PatientRequestDTO requestDTO) {
+        Patient p = mapper.toEntity(requestDTO);
+        p.setId(id);
+        return mapper.toResponseDto(repository.save(p));
+    }
+
+    public PatientResponseDTO patch(Long id, PatientRequestDTO requestDTO) {
         Patient p = repository.findById(id).orElseThrow(() -> new PatientNotFoundException(id));
         if (requestDTO.getPersonalNumber() != null) {
             p.setPersonalNumber(requestDTO.getPersonalNumber());
@@ -47,5 +53,13 @@ public class PatientService {
             return true;
         }
         throw new PatientNotFoundException(id);
+    }
+
+    public List<PatientResponseDTO> search(String name, String personNumber, Integer minJournals, Integer maxJournals) {
+        String namePattern = name == null ? "%" : "%" + name + "%";
+        String numberPattern = personNumber == null ? "%" : "%" + personNumber + "%";
+        Integer minJ = minJournals == null ? 0 : minJournals;
+        Integer maxJ = maxJournals == null ? Integer.MAX_VALUE : maxJournals;
+        return repository.search(namePattern, numberPattern, minJ, maxJ).stream().map(mapper::toResponseDto).toList();
     }
 }
