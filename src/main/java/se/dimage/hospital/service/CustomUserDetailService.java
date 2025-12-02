@@ -38,4 +38,8 @@ public class CustomUserDetailService implements UserDetailsService {
         AppUser user = repository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
         return refreshToken.equals(user.getRefreshToken());
     }
+
+    public UserDetails createUser(String username, String password) {
+        return null;
+    }
 }
