@@ -43,7 +43,7 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<PatientResponseDTO> addPatient(@RequestBody @Valid PatientRequestDTO requestDTO) {
         log.info("Add new patient: " + requestDTO);
-        return ResponseEntity.ok(service.add(requestDTO));
+        return ResponseEntity.status(201).body(service.add(requestDTO));
     }
 
     @PutMapping("/{id}")
