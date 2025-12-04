@@ -8,6 +8,7 @@ env:
   build-number: ${GITHUB_RUN_NUMBER}
 
 jobs:
+  permissions: write-all
   build:
     runs-on: ubuntu-latest
     steps:
