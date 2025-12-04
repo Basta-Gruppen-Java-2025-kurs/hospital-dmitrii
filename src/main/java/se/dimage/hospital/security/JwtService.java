@@ -18,7 +18,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-    @Value("${JWT_SECRET}")
+    @Value("${JWT_SECRET:secretsecretsecretsecretsecretse}")
     private String jwtSecret;
 
     public String generateToken(UserDetails userDetails) {

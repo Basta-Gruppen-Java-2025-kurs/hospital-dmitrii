@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import se.dimage.hospital.model.Patient;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -100,5 +101,53 @@ class PatientJPATest {
 
     }
 
+    @Test
+    @DisplayName("Basic persistence")
+    public void basicPersistenceTest() {
+        //arrange
+        Patient p = new Patient(null, "Gross Fred", "6473856392", List.of());
+        //act
+        Patient saved = repository.save(p);
+        Patient found = repository.findById(saved.getId()).orElse(null);
+        //assert
+        assertEquals(found, saved);
+        assertEquals(saved.getName(), p.getName());
+        assertEquals(saved.getPersonalNumber(), p.getPersonalNumber());
+        assertEquals(saved.getJournals(), p.getJournals());
+    }
+
+    @Test
+    @DisplayName("Updating a record")
+    public void updatingARecordTest() {
+        //arrange
+        Patient p = new Patient(null, "Ernest Hemingway", "617283745693", List.of());
+        //act/assert
+        Patient saved = repository.save(p);
+        assertEquals(p.getName(), saved.getName());
+        saved.setName("Lando Calrissian");
+        repository.save(saved);
+        Patient found = repository.findById(saved.getId()).orElse(null);
+        //assert
+        assertEquals(p.getPersonalNumber(), saved.getPersonalNumber());
+        assertNotNull(found);
+        assertEquals(saved.getId(), found.getId());
+        assertEquals(saved.getName(), found.getName());
+    }
+
+    @Test
+    @DisplayName("Patient deletion")
+    public void deletePatientTest() {
+        //arrange
+        Patient p = new Patient(null, "Antony Webber", "651242-7655", List.of());
+        long savedId = repository.save(p).getId();
+        long countRecords = repository.count();
+        //act
+        repository.deleteById(savedId);
+        Optional<Patient> found = repository.findById(savedId);
+        long newCount = repository.count();
+        //assert
+        assertTrue(found.isEmpty());
+        assertTrue(countRecords > newCount);
+    }
 
 }
