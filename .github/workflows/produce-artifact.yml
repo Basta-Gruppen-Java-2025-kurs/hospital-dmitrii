@@ -8,6 +8,7 @@ env:
   build-number: ${GITHUB_RUN_NUMBER}
 
 jobs:
+  permissions: write-all
   build:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +27,7 @@ jobs:
           retention-days: 0
       - uses: marvinpinto/action-automatic-releases@latest
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           automatic_release_tag: "${{ github.run_number }}"
           title: "Automatic release ${{ github.run_number }}"
