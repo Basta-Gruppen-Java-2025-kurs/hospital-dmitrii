@@ -7,8 +7,10 @@ on:
 env:
   build-number: ${GITHUB_RUN_NUMBER}
 
+permissions:
+  contents: write
+
 jobs:
-  permissions: write-all
   build:
     runs-on: ubuntu-latest
     steps:
