@@ -19,7 +19,7 @@ jobs:
       - name: Set up java
         uses: actions/setup-java@v5
         with:
-          distribution: 'graalvm'
+          distribution: 'zulu'
           java-version: '21'
           cache: 'maven'
 
