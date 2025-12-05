@@ -15,4 +15,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findByNameContains(String namePattern);
 
     List<Patient> findByPersonalNumberContains(String numberPattern);
+
+    List<Patient> findByNameAndPersonalNumber(String name, String personalNumber);
 }

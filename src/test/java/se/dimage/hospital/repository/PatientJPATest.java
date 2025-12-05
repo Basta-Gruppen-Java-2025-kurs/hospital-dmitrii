@@ -78,11 +78,20 @@ class PatientJPATest {
         //act
         List<Patient> foundPatient = repository.search("Lucy", "%", 0, Integer.MAX_VALUE);
 
+        List<Patient> found2 = repository.search("%r%", "%4%", 0, 1);
+
         //assert
         assertNotNull(foundPatient);
         assertFalse(foundPatient.isEmpty());
         assertEquals(1, foundPatient.size());
         assertEquals("Lucy", foundPatient.getFirst().getName());
+
+        assertNotNull(found2);
+        assertFalse(found2.isEmpty());
+        assertEquals(2, found2.size());
+        List<String> foundNames = found2.stream().map(Patient::getName).toList();
+        assertTrue(foundNames.contains("Paster"));
+        assertTrue(foundNames.contains("Dolores"));
     }
 
     @Test
@@ -168,6 +177,31 @@ class PatientJPATest {
         List<Patient> found = repository.findByPersonalNumberContains("17");
         //assert
         assertEquals(2, found.size());
+    }
+
+    @Test
+    @DisplayName("Finding patients by name and personal number")
+    public void findByNameAndPersonalNumberTest() {
+        //arrange
+        Patient dupName = new Patient(null, "Lucy", "628464-5292", List.of());
+        repository.save(dupName);
+        //act
+        List<Patient> found1 = repository.findByNameAndPersonalNumber("Lucy", "628464-5292");
+        List<Patient> found2 = repository.findByNameAndPersonalNumber("Lucy", "6152735487");
+        List<Patient> found3 = repository.findByNameAndPersonalNumber("Lucy", "0123456789");
+        List<Patient> found4 = repository.findByNameAndPersonalNumber("Dolores", "628464-5292");
+
+        //assert
+        assertFalse(found1.isEmpty());
+        assertFalse(found2.isEmpty());
+        assertTrue(found3.isEmpty());
+        assertTrue(found4.isEmpty());
+        assertEquals(1, found1.size());
+        assertEquals(1, found2.size());
+        assertEquals("Lucy", found1.getFirst().getName());
+        assertEquals("Lucy", found2.getFirst().getName());
+        assertEquals("628464-5292", found1.getFirst().getPersonalNumber());
+        assertEquals("6152735487", found2.getFirst().getPersonalNumber());
     }
 
 }
