@@ -28,6 +28,26 @@ class PatientJPATest {
     @BeforeEach
     void setUp() {
         repository.deleteAll();
+        //arrange
+        Patient p1 = new Patient();
+        p1.setName("Lucy");
+        p1.setPersonalNumber("6152735487");
+        repository.save(p1);
+
+        Patient p2 = new Patient();
+        p2.setName("Paster");
+        p2.setPersonalNumber("178263836402");
+        repository.save(p2);
+
+        Patient p3 = new Patient();
+        p3.setName("Doris");
+        p3.setPersonalNumber("712653-8217");
+        repository.save(p3);
+
+        Patient p4 = new Patient();
+        p4.setName("Dolores");
+        p4.setPersonalNumber("0123456789");
+        repository.save(p4);
     }
 
     @Test
@@ -55,21 +75,6 @@ class PatientJPATest {
     @DisplayName("search finds the correct patients")
     public void findByNameTest() {
         //arrange
-        Patient p1 = new Patient();
-        p1.setName("Lucy");
-        p1.setPersonalNumber("6152735487");
-        repository.save(p1);
-
-        Patient p2 = new Patient();
-        p2.setName("Paster");
-        p2.setPersonalNumber("178263836402");
-        repository.save(p2);
-
-        Patient p3 = new Patient();
-        p3.setName("Doris");
-        p3.setPersonalNumber("712653-8217");
-        repository.save(p3);
-
         //act
         List<Patient> foundPatient = repository.search("Lucy", "%", 0, Integer.MAX_VALUE);
 
@@ -84,10 +89,6 @@ class PatientJPATest {
     @DisplayName("Repository throws correct exceptions")
     public void exceptionTest() {
         //arrange
-        Patient p1 = new Patient();
-        p1.setName("Dolores");
-        p1.setPersonalNumber("0123456789");
-
         Patient p2 = new Patient();
         p2.setName("Doris");
         p2.setPersonalNumber("0123456789");
@@ -95,7 +96,6 @@ class PatientJPATest {
         Patient p3 = new Patient();
 
         //act + assert
-        repository.save(p1);
         assertThrows(DataIntegrityViolationException.class, () -> repository.save(p2));
         assertThrows(DataIntegrityViolationException.class, () -> repository.save(p3));
 
@@ -148,6 +148,26 @@ class PatientJPATest {
         //assert
         assertTrue(found.isEmpty());
         assertTrue(countRecords > newCount);
+    }
+
+    @Test
+    @DisplayName("Finding patients by name pattern")
+    public void findByNameContainsTest() {
+        //arrange
+        //act
+        List<Patient> found = repository.findByNameContains("Do");
+        //assert
+        assertEquals(2, found.size());
+    }
+
+    @Test
+    @DisplayName("Finding patients by personal number pattern")
+    public void findByPersonalNumberContainsTest() {
+        //arrange
+        //act
+        List<Patient> found = repository.findByPersonalNumberContains("17");
+        //assert
+        assertEquals(2, found.size());
     }
 
 }
