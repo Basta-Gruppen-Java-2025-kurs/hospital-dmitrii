@@ -1,0 +1,20 @@
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+
+  hospital:
+    image: hospital-api:one
+    restart: no
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_DRIVER: org.mariadb.jdbc.Driver
+      DATABASE_URL: jdbc:mariadb://db:3306/hospitalDB?createDatabaseIfNotExist=true
+      DATABASE_USER: root
+      DATABASE_PASSWORD: example
+      JWT_SECRET: "Extrasupermegasekretplus12345678"
+      JWT_TIMEOUT: 864000000
